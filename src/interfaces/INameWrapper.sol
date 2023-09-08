@@ -15,5 +15,4 @@ interface INameWrapper {
     ) external returns (bytes32);
 
     function names(bytes32 node) external view returns (bytes memory);
-
 }

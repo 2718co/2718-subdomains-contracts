@@ -22,7 +22,7 @@ contract NameWrapperProxyTest is Test {
     bytes public name = hex"b01692de226c7839d77f4f2303ddb2487fd41e4b865b6de80b67771a6b59b2b6";
 
     function setUp() public {
-        NameWrapperMock nameWrapperMock = new NameWrapperMock(node, name );
+        NameWrapperMock nameWrapperMock = new NameWrapperMock(node, name);
         nameWrapperProxy = new NameWrapperProxy(INameWrapper(address(nameWrapperMock)));
     }
 
@@ -56,7 +56,6 @@ contract NameWrapperProxyTest is Test {
         vm.expectRevert("Parent node cannot be empty");
         nameWrapperProxy.setSubnodeRecord(bytes32(0), "pedro", address(2), address(3), 0, 0, 0);
     }
-
 
     function test_RevertWhen_SubdomainAlreadyExists() public {
         vm.expectRevert("Subdomain already exists");

@@ -1,0 +1,9 @@
+{
+    "devDependencies": {
+        "prettier": "3.0.3",
+        "prettier-plugin-solidity": "1.1.3"
+    },
+    "scripts": {
+        "prettier": "prettier --write --plugin=prettier-plugin-solidity '**.sol'"
+    }
+}

@@ -33,7 +33,11 @@ contract NameWrapperProxy is ERC165, IERC1155Receiver, Ownable {
         return nameWrapper.setSubnodeRecord(parentNode, label, owner, resolver, ttl, fuses, expiry);
     }
 
-    function transferENSOwnership(address to, uint256 id, uint256 amount) public onlyOwner {
+    function transferENSOwnership(
+        address to,
+        uint256 id,
+        uint256 amount
+    ) public onlyOwner {
         return nameWrapper.safeTransferFrom(address(this), to, id, amount, "");
     }
 
@@ -60,21 +64,23 @@ contract NameWrapperProxy is ERC165, IERC1155Receiver, Ownable {
         return keccak256(abi.encodePacked(subnode, keccak256(bytes(domain))));
     }
 
-    function onERC1155Received(address, address, uint256, uint256, bytes memory)
-        public
-        pure
-        override
-        returns (bytes4)
-    {
+    function onERC1155Received(
+        address,
+        address,
+        uint256,
+        uint256,
+        bytes memory
+    ) public pure override returns (bytes4) {
         return this.onERC1155Received.selector;
     }
 
-    function onERC1155BatchReceived(address, address, uint256[] memory, uint256[] memory, bytes memory)
-        public
-        pure
-        override
-        returns (bytes4)
-    {
+    function onERC1155BatchReceived(
+        address,
+        address,
+        uint256[] memory,
+        uint256[] memory,
+        bytes memory
+    ) public pure override returns (bytes4) {
         return this.onERC1155BatchReceived.selector;
     }
 }
