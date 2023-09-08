@@ -12,6 +12,8 @@ To check if the NameWrapperProxy contract owns the ens domain, look the ownershi
 
 [ENS official deployed addresses](https://discuss.ens.domains/t/namewrapper-updates-including-testnet-deployment-addresses/14505)
 
+To check if a subdomain is effectively assigned to an address go to the resolver contract and pass the node to the addr function.
+
 ## Install dependencies
 
 ```sh

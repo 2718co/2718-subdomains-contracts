@@ -19,13 +19,17 @@ contract NameWrapperProxy is ERC165, IERC1155Receiver, Ownable {
 
     function setSubnodeRecord(
         bytes32 parentNode,
-        string memory label,
+        string calldata label,
         address owner,
         address resolver,
         uint64 ttl,
         uint32 fuses,
         uint64 expiry
-    ) public returns (bytes32 node) {
+    ) public returns (bytes32) {
+        require(parentNode != bytes32(0), "Parent node cannot be empty");
+        require(bytes(label).length > 0, "Label cannot be empty");
+        bytes32 node = getNode(label, parentNode);
+        require(keccak256(getNodeName(node)) == keccak256(hex""), "Subdomain already exists");
         return nameWrapper.setSubnodeRecord(parentNode, label, owner, resolver, ttl, fuses, expiry);
     }
 
@@ -33,8 +37,27 @@ contract NameWrapperProxy is ERC165, IERC1155Receiver, Ownable {
         return nameWrapper.safeTransferFrom(address(this), to, id, amount, "");
     }
 
+    function getNodeName(bytes32 node) public view returns (bytes memory) {
+        return nameWrapper.names(node);
+    }
+
     function supportsInterface(bytes4 interfaceId) public view override(ERC165, IERC165) returns (bool) {
         return interfaceId == type(IERC1155Receiver).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    /// Gets the namehash of a subdomain, for example, `areo.2718.eth`:
+    function getNode(string calldata subdomain, bytes32 parentNode) public pure returns (bytes32) {
+        require(bytes(subdomain).length > 0, "Subdomain cannot be empty");
+        return keccak256(abi.encodePacked(parentNode, keccak256(bytes(subdomain))));
+    }
+
+    /// Gets the namehash of a domain, valid for resolvers and other ens functionalities, for example, gets the namehash
+    /// of the domain `2718.eth`:
+    function getParentNode(string calldata domain) public pure returns (bytes32) {
+        require(bytes(domain).length > 0, "Domain cannot be empty");
+        string memory parentDomain = "eth";
+        bytes32 subnode = keccak256(abi.encodePacked(bytes32(0), keccak256(bytes(parentDomain))));
+        return keccak256(abi.encodePacked(subnode, keccak256(bytes(domain))));
     }
 
     function onERC1155Received(address, address, uint256, uint256, bytes memory)

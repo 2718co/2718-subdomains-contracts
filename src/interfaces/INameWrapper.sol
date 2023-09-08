@@ -6,11 +6,14 @@ interface INameWrapper {
 
     function setSubnodeRecord(
         bytes32 parentNode,
-        string memory label,
+        string calldata label,
         address owner,
         address resolver,
         uint64 ttl,
         uint32 fuses,
         uint64 expiry
-    ) external returns (bytes32 node);
+    ) external returns (bytes32);
+
+    function names(bytes32 node) external view returns (bytes memory);
+
 }
